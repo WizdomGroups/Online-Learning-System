@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "compilerOptions": {
+    "strict": false, // Disables all strict type-checking
+    "noImplicitAny": false, // Allows variables with implicit `any` type
+    "suppressImplicitAnyIndexErrors": true, // Suppresses index signature errors
+    "skipLibCheck": true, // Ignores errors in declaration files (.d.ts)
+    "allowJs": true, // Allows JavaScript files in TypeScript project
+    "checkJs": false, // Disables type-checking in JS files
+    "esModuleInterop": true // Helps with module import compatibility
+  }
+}

@@ -1,0 +1,69 @@
+.ant-pagination-item-active {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+}
+
+.ant-pagination-item-active a {
+    color: var(--color-primary-foreground) !important;
+}
+
+.ant-pagination-item:hover {
+    border-color: var(--color-primary) !important;
+}
+
+.ant-pagination-item:hover a {
+    color: var(--color-primary) !important;
+}
+
+.ant-pagination-item-active:hover a {
+    color: var(--color-primary-foreground) !important;
+}
+
+/* Style for next/prev icons */
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+}
+
+/* Style for the page size selector */
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+    border-color: var(--color-primary) !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 2px rgba(255, 155, 68, 0.2) !important;
+}
+
+.table {
+    width: 100% !important;
+}
+
+/* Style the pagination section */
+.ant-table-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 16px !important;
+}
+
+/* Adjust the items per page dropdown position */
+.ant-pagination-options {
+    margin-left: 16px;
+}
+
+/* Custom Tag rounded style */
+.ant-tag {
+    border-radius: 9999px !important;
+    padding: 0.2rem 0.75rem;
+    font-weight: 500;
+}
+
+/* Icon hover effects */
+.action-icon svg {
+    transition: all 0.2s ease-in-out;
+    font-size: 18px;
+}
+  
