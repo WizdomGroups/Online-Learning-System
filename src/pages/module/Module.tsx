@@ -263,7 +263,7 @@ const Module: React.FC = () => {
       </div>
       {/* Filters */}
       <div
-        className={`grid grid-cols-1 ${isSuperAdmin ? "md:grid-cols-6" : "md:grid-cols-4"
+        className={`grid grid-cols-1 items-end ${isSuperAdmin ? "md:grid-cols-6" : "md:grid-cols-4"
           } gap-4 mt-5`}
       >
         {" "}
@@ -299,11 +299,13 @@ const Module: React.FC = () => {
             { label: "All", value: "all" },
             { label: "Active", value: "active" },
             { label: "Inactive", value: "inactive" },
+            { label: "Pending", value: "Pending" },
           ]}
           className="md:col-span-1"
           value={status}
           name="status"
           onChange={(e) => setStatus(e.target.value)}
+          customDropdown={true}
         />
       </div>
 

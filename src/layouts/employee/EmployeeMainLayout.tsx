@@ -1,10 +1,10 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import EmployeeSidebar from "../../components/EmployeeSidebar";
+import Footer from "../../components/Footer";
 import useLocalStorageUserData from "../../lib/hooks/useLocalStorageUserData";
 import { useEffect } from "react";
 
-const MainLayout = () => {
+const EmployeeMainLayout = () => {
   const { user } = useLocalStorageUserData();
   const navigate = useNavigate();
   const location = useLocation();
@@ -13,26 +13,22 @@ const MainLayout = () => {
     if (!user) {
       navigate("/auth/login");
     }
-  }, [location.pathname]); // runs on every route/path change
+  }, [location.pathname]);
 
   return (
-    <div className="h-screen grid grid-cols-[w-56] lg:grid-cols-[16rem] grid-rows-[auto_1fr] overflow-hidden">
-      {/* Sidebar */}
-      <div className="row-span-2 bg-white border-r">
-        <EmployeeSidebar />
-      </div>
-
+    <div className="min-h-screen bg-[#F5F7FA] flex flex-col">
       {/* Navbar */}
-      <div className="col-start-2">
-        <Navbar />
-      </div>
+      <Navbar />
 
-      {/* Main Content with scroll */}
-      <main className="col-start-2 overflow-y-auto bg-[#F5F7FA]">
+      {/* Main Content */}
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
 
-export default MainLayout;
+export default EmployeeMainLayout;

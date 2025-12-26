@@ -15,6 +15,7 @@
     "antd": "^5.24.6",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
     "jspdf": "^3.0.3",
     "jspdf-autotable": "^5.0.2",
     "lodash": "^4.17.21",

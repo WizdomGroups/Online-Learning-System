@@ -317,11 +317,10 @@ const AssignCertifications: React.FC = () => {
   const tabItems = [
     { label: "Users", value: "Users" },
     {
-      label: `${
-        selectedIds.length > 0
+      label: `${selectedIds.length > 0
           ? `Selected Users (${selectedIds.length})`
           : "Selected Users"
-      }`,
+        }`,
       value: "Selected Users",
     },
     // { label: "User Groups", value: "userGroups" },
@@ -743,6 +742,7 @@ const AssignCertifications: React.FC = () => {
                         { label: "5", value: "5" },
                       ]}
                       className="w-full"
+                      customDropdown={true}
                     />
                   </div>
 
@@ -805,9 +805,8 @@ const AssignCertifications: React.FC = () => {
 
                     {activeTab === "Users" && (
                       <div
-                        className={` mt-5 p-4 ${
-                          errors.selectedIds ? "border border-primary" : ""
-                        }`}
+                        className={` mt-5 p-4 ${errors.selectedIds ? "border border-primary" : ""
+                          }`}
                       >
                         {!isCompanySelected ? (
                           <div className="text-center p-8 bg-gray-50 border border-gray-200 rounded-md">
@@ -854,7 +853,7 @@ const AssignCertifications: React.FC = () => {
                               pageSize: 10,
                             }}
                             headerType="Award"
-                            onPageChange={() => {}}
+                            onPageChange={() => { }}
                             rowSelection={false}
                             loading={false}
                             rowKey="id"
@@ -880,7 +879,7 @@ const AssignCertifications: React.FC = () => {
                     onConfirm={() => {
                       navigate(-1);
                     }}
-                    // onClose={() => setModalOpen(false)} // <-- handles outside click
+                  // onClose={() => setModalOpen(false)} // <-- handles outside click
                   />
 
                   <ErrorModal

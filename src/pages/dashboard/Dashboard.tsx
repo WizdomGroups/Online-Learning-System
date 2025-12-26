@@ -1,462 +1,266 @@
+import React, { useState, useEffect } from "react";
 import {
-  FileText,
-  PlusCircle,
-  Users,
-  Trophy,
-  Layers,
-  TrendingUp,
-  Bell,
-  Eye,
-  Clock,
-  Star,
-  ChevronRight,
-  RefreshCw,
-  PlayCircle,
-  CheckCircle,
-  RotateCcw,
-  XCircle,
-  Target,
-  BarChart3,
-  Award,
-  AlertCircle,
+  Users, Layers, FileText, Trophy, RefreshCw,
+  Sparkles, ChevronRight, TrendingUp, GraduationCap,
+  ArrowUpRight, Activity, ShieldCheck
 } from "lucide-react";
-import { useState, useEffect } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  AreaChart,
-  Area,
-  BarChart as RechartsBarChart,
-  Bar,
-} from "recharts";
-import StatCard from "../../components/StatCard";
-import { Button, Spin, Alert } from "antd";
-import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button, Spin, Progress, Tooltip } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import {
-  fetchAdminDashboardStatistics,
-  AdminDashboardStatistics,
-} from "../../lib/network/dashboardApis";
+import { fetchAdminDashboardStatistics } from "../../lib/network/dashboardApis";
 import { useAppDispatch } from "../../lib/hooks/useAppDispatch";
 import useLocalStorageUserData from "../../lib/hooks/useLocalStorageUserData";
 
-// Single brand color palette in light sky blue
-const BRAND_COLOR = "#38bdf8"; // sky-400
-const OD_COLORS = {
-  blue: BRAND_COLOR,
-  lightBlue: BRAND_COLOR,
-  green: BRAND_COLOR,
-  yellow: BRAND_COLOR,
-  magenta: BRAND_COLOR,
-  orange: BRAND_COLOR,
-  teal: BRAND_COLOR,
-  grey: BRAND_COLOR,
-  red: BRAND_COLOR,
-  purple: BRAND_COLOR,
-  indigo: BRAND_COLOR,
-  gradients: {
-    // slightly richer light sky blue for icon backgrounds
-    blue: `linear-gradient(135deg, #bae6fd 0%,rgb(126, 187, 219) 100%)`, // sky-200
-    green: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-    yellow: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-    purple: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-    orange: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-    teal: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219)100%)`,
-    grey: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-    amber: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-    emerald: `linear-gradient(135deg, #bae6fd 0%, rgb(126, 187, 219) 100%)`,
-  },
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+  }
 };
 
-// Helper function to generate stats from admin dashboard data
-const getAdminStats = (adminStatistics: AdminDashboardStatistics | null) => {
-  if (!adminStatistics) {
-    return [
-      // Overview Stats
-      {
-        title: "Total Employees",
-        value: 0,
-        change: "Loading...",
-        icon: <Users size={20} />,
-        bgColor: OD_COLORS.gradients.blue,
-        description: "Active employees enrolled",
-      },
-      {
-        title: "Modules",
-        value: 0,
-        change: "Loading...",
-        icon: <Layers size={20} />,
-        bgColor: OD_COLORS.gradients.yellow,
-        description: "Learning modules available",
-      },
-      {
-        title: "Documents",
-        value: 0,
-        change: "Loading...",
-        icon: <FileText size={20} />,
-        bgColor: OD_COLORS.gradients.purple,
-        description: "Learning resources",
-      },
-      {
-        title: "Certifications",
-        value: 0,
-        change: "Loading...",
-        icon: <Trophy size={20} />,
-        bgColor: OD_COLORS.gradients.orange,
-        description: "Certificates issued",
-      },
-      // Certification Breakdown
-      {
-        title: "Assigned",
-        value: 0,
-        change: "Loading...",
-        icon: <PlayCircle size={20} />,
-        bgColor: OD_COLORS.gradients.yellow,
-        description: "Certifications assigned",
-      },
-      {
-        title: "Re-assigned",
-        value: 0,
-        change: "Loading...",
-        icon: <RotateCcw size={20} />,
-        bgColor: OD_COLORS.gradients.purple,
-        description: "Certifications re-assigned",
-      },
-      {
-        title: "Completed",
-        value: 0,
-        change: "Loading...",
-        icon: <CheckCircle size={20} />,
-        bgColor: OD_COLORS.gradients.green,
-        description: "Certifications completed",
-      },
-      {
-        title: "Review",
-        value: 0,
-        change: "Loading...",
-        icon: <Eye size={20} />,
-        bgColor: OD_COLORS.gradients.amber,
-        description: "Certifications under review",
-      },
-      {
-        title: "Rejected",
-        value: 0,
-        change: "Loading...",
-        icon: <XCircle size={20} />,
-        bgColor: OD_COLORS.gradients.grey,
-        description: "Certifications rejected",
-      },
-      // Assessment Breakdown
-      {
-        title: "Assessments Passed",
-        value: 0,
-        change: "Loading...",
-        icon: <Award size={20} />,
-        bgColor: OD_COLORS.gradients.emerald,
-        description: "Assessments passed",
-      },
-      {
-        title: "Assessments Failed",
-        value: 0,
-        change: "Loading...",
-        icon: <Target size={20} />,
-        bgColor: OD_COLORS.gradients.amber,
-        description: "Assessments failed",
-      },
-    ];
-  }
-
-  return [
-    // Overview Stats
-    {
-      title: "Total Employees",
-      value: adminStatistics.totalEmployees,
-      change: "Active employees",
-      icon: <Users size={20} />,
-      bgColor: OD_COLORS.gradients.blue,
-      description: "Active employees enrolled",
-    },
-    {
-      title: "Modules",
-      value: adminStatistics.totalModules,
-      change: "Available modules",
-      icon: <Layers size={20} />,
-      bgColor: OD_COLORS.gradients.yellow,
-      description: "Learning modules available",
-    },
-    {
-      title: "Documents",
-      value: adminStatistics.totalDocuments,
-      change: "Learning resources",
-      icon: <FileText size={20} />,
-      bgColor: OD_COLORS.gradients.purple,
-      description: "Learning resources",
-    },
-    {
-      title: "Certifications",
-      value: adminStatistics.totalCertificates,
-      change: "Total certificates",
-      icon: <Trophy size={20} />,
-      bgColor: OD_COLORS.gradients.orange,
-      description: "Certificates issued",
-    },
-    // Certification Breakdown
-    {
-      title: "Assigned",
-      value: adminStatistics.certifications.Assigned,
-      change: "Ready to start",
-      icon: <PlayCircle size={20} />,
-      bgColor: OD_COLORS.gradients.yellow,
-      description: "Certifications assigned",
-    },
-    {
-      title: "Re-assigned",
-      value: adminStatistics.certifications["Re-assigned"],
-      change: "Re-assigned",
-      icon: <RotateCcw size={20} />,
-      bgColor: OD_COLORS.gradients.purple,
-      description: "Certifications re-assigned",
-    },
-    {
-      title: "Completed",
-      value: adminStatistics.certifications.Completed,
-      change: "Successfully completed",
-      icon: <CheckCircle size={20} />,
-      bgColor: OD_COLORS.gradients.green,
-      description: "Certifications completed",
-    },
-    {
-      title: "Review",
-      value: adminStatistics.certifications.Review,
-      change: "Under review",
-      icon: <Eye size={20} />,
-      bgColor: OD_COLORS.gradients.amber,
-      description: "Certifications under review",
-    },
-    {
-      title: "Rejected",
-      value: adminStatistics.certifications.Cancelled,
-      change: "Rejected",
-      icon: <XCircle size={20} />,
-      bgColor: OD_COLORS.gradients.grey,
-      description: "Certifications rejected",
-    },
-    // Assessment Breakdown
-    {
-      title: "Assessments Passed",
-      value: adminStatistics.assessments.Pass,
-      change: "Successfully passed",
-      icon: <Award size={20} />,
-      bgColor: OD_COLORS.gradients.emerald,
-      description: "Assessments passed",
-    },
-    {
-      title: "Assessments Failed",
-      value: adminStatistics.assessments.Fail,
-      change: "Need improvement",
-      icon: <Target size={20} />,
-      bgColor: OD_COLORS.gradients.amber,
-      description: "Assessments failed",
-    },
-  ];
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } }
 };
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { tenentId } = useLocalStorageUserData();
-  const [loading, setLoading] = useState(false);
-  // Dynamic greeting with emoji
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 11) return "🌞 Good Morning";
-    if (hour >= 11 && hour < 16) return "🌤️ Good Afternoon";
-    if (hour >= 16 && hour < 20) return "🌆 Good Evening";
-    return "🌙 Good Night";
-  };
+  const { tenentId, userName } = useLocalStorageUserData();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const greeting = getGreeting();
-
-  // Redux state
   const { adminStatistics, adminLoading, adminError } = useSelector(
     (state: RootState) => state.dashboard
   );
 
-  // Fetch admin dashboard data on component mount
   useEffect(() => {
-    if (tenentId) {
-      dispatch(
-        fetchAdminDashboardStatistics({
-          tenantId: tenentId.toString(),
-        })
-      );
-    }
-  }, [dispatch, tenentId]);
+    if (tenentId) loadData();
+  }, [tenentId]);
 
-  const loadDashboardData = () => {
-    setLoading(true);
+  const loadData = async () => {
+    setIsRefreshing(true);
     if (tenentId) {
-      dispatch(
-        fetchAdminDashboardStatistics({
-          tenantId: tenentId.toString(),
-        })
-      ).finally(() => {
-        setLoading(false);
-      });
-    } else {
-      setLoading(false);
+      await dispatch(fetchAdminDashboardStatistics({ tenantId: tenentId.toString() }));
     }
+    setIsRefreshing(false);
   };
 
-  // Generate stats from admin dashboard data
-  const adminStats = getAdminStats(adminStatistics);
+  const brandTeal = "#084c61";
+  const brandAccent = "#2dd4bf";
 
-  // Show loading spinner if data is being fetched
   if (adminLoading && !adminStatistics) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Spin size="large" />
-          <p className="mt-4 text-gray-600 text-sm">
-            Loading dashboard data...
-          </p>
-        </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f0fafa]">
+        <motion.div 
+          animate={{ rotate: 360 }} 
+          transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+          className="mb-8"
+        >
+          <Sparkles size={48} color={brandTeal} />
+        </motion.div>
+        <Spin size="large" />
+        <p className="mt-10 text-[#084c61] font-black uppercase text-xs tracking-[0.3em] animate-pulse">
+          Initialising Analytics...
+        </p>
       </div>
     );
   }
 
   return (
-    <div
-      className="min-h-screen bg-gray-50"
-      style={{ fontFamily: "'Inter', 'Source Sans Pro', Arial, sans-serif" }}
-    >
-      {/* Professional Header - Fixed positioning */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-        <div className="px-8 py-5">
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#f4f7f9] pb-24 font-sans text-slate-900 overflow-x-hidden">
+      {/* Background Decorative Elements */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-teal-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-slate-400/5 rounded-full blur-3xl" />
+      </div>
+
+      <header 
+        style={{ backgroundColor: brandTeal }} 
+        className="border-b border-white/10 sticky top-0 z-50 shadow-xl backdrop-blur-md bg-opacity-95"
+      >
+        <div className="max-w-[1600px] mx-auto px-8 h-20 flex items-center justify-between">
+          <motion.div 
+            initial={{ x: -20, opacity: 0 }} 
+            animate={{ x: 0, opacity: 1 }}
+            className="flex items-center gap-4"
+          >
+            <div className="h-11 w-11 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
+              <Sparkles className="text-white" size={22} />
+            </div>
             <div>
-              <h1
-                className="text-2xl font-semibold text-gray-900"
-                style={{ fontFamily: "'Source Sans Pro', Arial, sans-serif" }}
-              >
-                Dashboard
+              <h1 className="text-white text-xl font-black tracking-tight leading-none">
+                LMS<span style={{ color: brandAccent }}>Command</span>
               </h1>
-              <p
-                className="text-sm text-gray-600 mt-1"
-                style={{ fontFamily: "'Source Sans Pro', Arial, sans-serif" }}
-              >
-                {greeting}, welcome back
+              <p className="text-teal-200/50 text-[10px] uppercase font-bold tracking-[0.2em] mt-1">
+                Admin Intel Engine
               </p>
             </div>
+          </motion.div>
+          
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Button
-              icon={<RefreshCw className="w-4 h-4" />}
-              onClick={loadDashboardData}
-              loading={loading || adminLoading}
-              className="bg-[#243672] text-white border-[#243672] hover:bg-[#1e2d5f] hover:border-[#1e2d5f] flex items-center gap-2 h-10 px-5 rounded-md transition-colors duration-200 font-medium"
+              type="primary"
+              onClick={loadData}
+              style={{ backgroundColor: brandAccent, borderColor: "transparent" }}
+              className="hover:shadow-[0_0_20px_rgba(45,212,191,0.4)] text-[#084c61] font-black h-11 px-8 rounded-xl flex items-center gap-3 transition-all"
             >
-              Refresh Data
+              <RefreshCw size={18} className={isRefreshing ? "animate-spin" : ""} />
+              SYNC REAL-TIME
             </Button>
+          </motion.div>
+        </div>
+      </header>
+
+      <motion.main 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-[1600px] mx-auto px-8 pt-12 relative z-10"
+      >
+        <motion.div variants={itemVariants} className="mb-12 flex justify-between items-end">
+          <div>
+             <h2 className="text-4xl font-black text-slate-900 tracking-tighter">
+                Hello, {userName?.split(' ')[0] || 'Trainer'}
+             </h2>
+             <div className="flex items-center gap-3 mt-3">
+               <span className="flex h-3 w-3 rounded-full bg-emerald-500 animate-pulse" />
+               <p className="text-slate-500 font-medium">System operational • <span style={{ color: brandTeal }} className="font-bold">Live Metrics</span></p>
+             </div>
           </div>
+          <div className="hidden lg:block text-right">
+             <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Global Compliance</p>
+             <p className="text-3xl font-black text-slate-800">94.2%</p>
+          </div>
+        </motion.div>
+
+        {/* --- Stats Grid --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <BookStatCard title="Workforce" value={adminStatistics?.totalEmployees} icon={<Users />} brandColor={brandTeal} />
+          <BookStatCard title="Modules" value={adminStatistics?.totalModules} icon={<Layers />} brandColor={brandTeal} />
+          <BookStatCard title="Documents" value={adminStatistics?.totalDocuments} icon={<FileText />} brandColor={brandTeal} />
+          <BookStatCard title="Certs Issued" value={adminStatistics?.totalCertificates} icon={<Trophy />} brandColor={brandTeal} />
         </div>
-      </div>
 
-      {/* Main Content Area - Consistent padding */}
-      <div className="px-8 py-6">
-        {/* Error Alert */}
-        {adminError && (
-          <Alert
-            message="Error Loading Dashboard Data"
-            description={adminError}
-            type="error"
-            icon={<AlertCircle className="w-4 h-4" />}
-            closable
-            className="mb-6 rounded-lg"
-          />
-        )}
-
-        {/* Stats Cards - Properly aligned sections */}
-        <div className="space-y-8">
-          {/* Overview Stats Section */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-              <h2 className="text-lg font-semibold text-gray-800">
-                System Overview
-              </h2>
+        {/* --- Certification Section --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <motion.div 
+            variants={itemVariants}
+            className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100"
+          >
+            <div className="flex justify-between items-center mb-10">
+              <h3 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+                Certification Lifecycle <ChevronRight size={20} style={{ color: brandTeal }} />
+              </h3>
+              <Activity size={20} className="text-slate-300" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {adminStats.slice(0, 4).map((stat, index) => (
-                <StatCard
-                  key={index}
-                  title={stat.title}
-                  value={stat.value}
-                  icon={stat.icon}
-                  bgColor={stat.bgColor}
-                  change={stat.change}
-                  description={stat.description}
+            
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+              <StatusTile label="Assigned" val={adminStatistics?.certifications.Assigned} color="teal" brandColor={brandTeal} />
+              <StatusTile label="Review" val={adminStatistics?.certifications.Review} color="amber" brandColor={brandTeal} />
+              <StatusTile label="Success" val={adminStatistics?.certifications.Completed} color="emerald" brandColor={brandTeal} />
+              <StatusTile label="Retake" val={adminStatistics?.certifications["Re-assigned"]} color="slate" brandColor={brandTeal} />
+              <StatusTile label="Dropped" val={adminStatistics?.certifications.Cancelled} color="rose" brandColor={brandTeal} />
+            </div>
+          </motion.div>
+
+          <motion.div 
+            variants={itemVariants}
+            style={{ backgroundColor: brandTeal }} 
+            className="rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden group"
+          >
+            {/* Animated background circle */}
+            <motion.div 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 8, repeat: Infinity }}
+              className="absolute -top-20 -right-20 w-64 h-64 bg-teal-400/10 rounded-full blur-3xl" 
+            />
+            
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="flex justify-between items-start mb-8">
+                <ShieldCheck size={32} className="text-[#2dd4bf]" />
+                <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Priority Audit</span>
+              </div>
+              
+              <h3 className="text-2xl font-black mb-2">Performance Audit</h3>
+              <p className="text-teal-100/60 text-xs font-bold uppercase tracking-widest mb-8">Quarterly Review</p>
+              
+              <div className="mt-auto">
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-3xl font-black italic">85%</span>
+                  <span className="text-teal-300 text-xs font-bold">+4.2%</span>
+                </div>
+                <Progress 
+                  percent={85} 
+                  strokeColor="#2dd4bf" 
+                  trailColor="rgba(255,255,255,0.1)" 
+                  showInfo={false} 
+                  strokeWidth={10} 
                 />
-              ))}
+                <Button className="w-full mt-8 h-14 bg-white text-[#084c61] hover:bg-[#2dd4bf] hover:text-white border-none font-black rounded-2xl transition-all flex items-center justify-center gap-2">
+                  VIEW FULL REPORTS <ArrowUpRight size={18} />
+                </Button>
+              </div>
             </div>
-          </section>
-
-          {/* Certification Stats Section */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
-              <h2 className="text-lg font-semibold text-gray-800">
-                Certification Statistics
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-              {adminStats.slice(4, 9).map((stat, index) => (
-                <StatCard
-                  key={index}
-                  title={stat.title}
-                  value={stat.value}
-                  icon={stat.icon}
-                  bgColor={stat.bgColor}
-                  change={stat.change}
-                  description={stat.description}
-                />
-              ))}
-            </div>
-          </section>
-
-          {/* Assessment Stats Section */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-6 bg-green-600 rounded-full"></div>
-              <h2 className="text-lg font-semibold text-gray-800">
-                Assessment Statistics
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {adminStats.slice(9, 11).map((stat, index) => (
-                <StatCard
-                  key={index}
-                  title={stat.title}
-                  value={stat.value}
-                  icon={stat.icon}
-                  bgColor={stat.bgColor}
-                  change={stat.change}
-                  description={stat.description}
-                />
-              ))}
-            </div>
-          </section>
+          </motion.div>
         </div>
-      </div>
+      </motion.main>
     </div>
+  );
+};
+
+// --- Sub-Components with Enhanced Animations ---
+
+const BookStatCard = ({ title, value, icon, brandColor }: any) => (
+  <motion.div
+    variants={itemVariants}
+    whileHover={{ y: -10, scale: 1.02 }}
+    className="bg-white p-8 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100 relative overflow-hidden group cursor-pointer"
+  >
+    <div className="relative z-10">
+      <div 
+        style={{ backgroundColor: `${brandColor}08`, color: brandColor }} 
+        className="p-4 w-fit rounded-2xl mb-6 transition-all duration-500 group-hover:scale-110 group-hover:bg-[#084c61] group-hover:text-white"
+      >
+        {React.cloneElement(icon, { size: 24 })}
+      </div>
+      <div className="flex items-baseline gap-2">
+        <h4 className="text-4xl font-black text-slate-900 tracking-tighter">{value || 0}</h4>
+        <div className="h-2 w-2 rounded-full bg-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
+      <p className="text-slate-400 font-black uppercase text-[10px] tracking-[0.2em] mt-2">{title}</p>
+    </div>
+    
+    {/* Decorative Background Path */}
+    <div className="absolute -bottom-4 -right-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+      {React.cloneElement(icon, { size: 120 })}
+    </div>
+  </motion.div>
+);
+
+const StatusTile = ({ label, val, color, brandColor }: any) => {
+  const styles: any = {
+    teal: { bg: `${brandColor}10`, text: brandColor, border: `${brandColor}20` },
+    amber: { bg: "#fffbeb", text: "#d97706", border: "#fde68a" },
+    emerald: { bg: "#ecfdf5", text: "#059669", border: "#a7f3d0" },
+    slate: { bg: "#f8fafc", text: "#475569", border: "#e2e8f0" },
+    rose: { bg: "#fff1f2", text: "#e11d48", border: "#fecdd3" },
+  };
+
+  return (
+    <motion.div 
+      whileHover={{ scale: 1.05, rotate: [0, -1, 1, 0] }}
+      style={{ 
+        backgroundColor: styles[color].bg, 
+        color: styles[color].text,
+        borderColor: styles[color].border
+      }} 
+      className="flex flex-col items-center justify-center py-8 rounded-[2rem] border transition-shadow hover:shadow-lg"
+    >
+      <span className="text-[9px] font-black uppercase tracking-[0.15em] opacity-70 mb-2">{label}</span>
+      <span className="text-3xl font-black tracking-tighter">{val || 0}</span>
+    </motion.div>
   );
 };
 

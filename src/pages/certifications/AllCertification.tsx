@@ -72,24 +72,24 @@ const AllCertifications: React.FC = () => {
     // Conditionally show company name for super admin
     ...(isSuperAdmin
       ? [
-          {
-            key: "CompanyModel",
-            label: "Company Name",
-            dataIndex: "CompanyModel",
-            render: (_value: string, record: CertificationRecord) => {
-              // Prefer backend-provided name; fallback to client-mapped company list by tenantId
-              const fallbackName = companyOptions.find(
-                (c) => String(c.id) === String(record?.tenantId ?? "")
-              )?.name;
-              const companyName = record?.CompanyModel?.name || fallbackName || "-";
-              return (
-                <span className="max-w-[200px] truncate overflow-hidden whitespace-nowrap block">
-                  {companyName}
-                </span>
-              );
-            },
+        {
+          key: "CompanyModel",
+          label: "Company Name",
+          dataIndex: "CompanyModel",
+          render: (_value: string, record: CertificationRecord) => {
+            // Prefer backend-provided name; fallback to client-mapped company list by tenantId
+            const fallbackName = companyOptions.find(
+              (c) => String(c.id) === String(record?.tenantId ?? "")
+            )?.name;
+            const companyName = record?.CompanyModel?.name || fallbackName || "-";
+            return (
+              <span className="max-w-[200px] truncate overflow-hidden whitespace-nowrap block">
+                {companyName}
+              </span>
+            );
           },
-        ]
+        },
+      ]
       : []),
     {
       key: "feedback",
@@ -345,6 +345,7 @@ const AllCertifications: React.FC = () => {
           value={status}
           name="status"
           onChange={(e) => setStatus(e.target.value)}
+          customDropdown={true}
         />
         {isSuperAdmin && (
           <SelectField

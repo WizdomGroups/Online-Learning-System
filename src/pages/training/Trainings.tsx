@@ -139,16 +139,16 @@ const Trainings: React.FC = () => {
     },
     ...(isSuperAdmin
       ? [
-          {
-            key: "companyName",
-            label: "Company",
-            render: (_value: string, record: any) => (
-              <span className="max-w-[200px] truncate overflow-hidden whitespace-nowrap block">
-                {record?.CompanyModel?.name || "-"}
-              </span>
-            ),
-          },
-        ]
+        {
+          key: "companyName",
+          label: "Company",
+          render: (_value: string, record: any) => (
+            <span className="max-w-[200px] truncate overflow-hidden whitespace-nowrap block">
+              {record?.CompanyModel?.name || "-"}
+            </span>
+          ),
+        },
+      ]
       : []),
     {
       key: "modules",
@@ -331,9 +331,8 @@ const Trainings: React.FC = () => {
       </div>
       {/* Filters */}
       <div
-        className={`grid grid-cols-1 ${
-          isSuperAdmin ? "md:grid-cols-6" : "md:grid-cols-4"
-        } gap-4 mt-5`}
+        className={`grid grid-cols-1 ${isSuperAdmin ? "md:grid-cols-6" : "md:grid-cols-4"
+          } gap-4 mt-5`}
       >
         <SearchField
           className={isSuperAdmin ? "md:col-span-3" : "md:col-span-3"}
@@ -374,6 +373,7 @@ const Trainings: React.FC = () => {
           value={status}
           name="status"
           onChange={(e) => setStatus(e.target.value)}
+          customDropdown={true}
         />
       </div>
 

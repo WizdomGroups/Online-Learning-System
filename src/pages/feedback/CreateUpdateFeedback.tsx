@@ -71,6 +71,7 @@ const CreateUpdateFeedback: React.FC = () => {
                   { label: "Design", value: "design" },
                   { label: "Development", value: "development" },
                 ]}
+                customDropdown={true}
               />
               <SelectField
                 label="Certificate Type"
@@ -82,6 +83,7 @@ const CreateUpdateFeedback: React.FC = () => {
                   { label: "Design", value: "design" },
                   { label: "Development", value: "development" },
                 ]}
+                customDropdown={true}
               />
 
               <div className="col-span-2">

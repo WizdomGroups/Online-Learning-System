@@ -795,6 +795,7 @@ const CreateModule: React.FC = () => {
                 options={WizdomCategoryList}
                 placeholder="Select Category"
                 className="col-span-2 md:col-span-1"
+                customDropdown={true}
               />
 
               <SelectField
@@ -845,8 +846,8 @@ const CreateModule: React.FC = () => {
                       <div
                         key={file.id}
                         className={`flex items-center justify-between p-4 border rounded-lg ${moduleFilesToDelete.includes(file.id)
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 bg-gray-50"
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 bg-gray-50"
                           }`}
                       >
                         <div className="flex items-center space-x-3">

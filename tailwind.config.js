@@ -6,29 +6,40 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        primary: ["Roboto", "sans-serif"],
-        awesome: ["Fontawesome"],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+        primary: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+      },
+      fontSize: {
+        'xs': ['0.75rem', { lineHeight: '1rem' }],      // 12px
+        'sm': ['0.875rem', { lineHeight: '1.25rem' }],  // 14px
+        'base': ['1rem', { lineHeight: '1.5rem' }],     // 16px
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],  // 18px
+        'xl': ['1.25rem', { lineHeight: '1.75rem' }],   // 20px
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],      // 24px
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],   // 36px
+        '5xl': ['3rem', { lineHeight: '1' }],           // 48px
       },
       colors: {
         // Brand Colors
-        primary: "var(--color-primary)",
-        "primary-hover": "var(--color-primary-hover)",
-        secondary: "var(--color-sidebar-bg)",
-        "secondary-hover": "var(--color-sidebar-hover-bg)",
+        primary: "#F26522",
+        "primary-hover": "#d4571e",
+        secondary: "#3B7080",
+        "secondary-hover": "#33616f",
 
         // Semantic Colors
-        success: "var(--color-success)",
-        "success-hover": "var(--color-success-hover)",
-        info: "var(--color-link)",
-        "info-hover": "var(--color-link-hover)",
-        warning: "var(--color-warning)",
-        "warning-hover": "var(--color-warning-hover)",
-        danger: "var(--color-danger)",
-        "danger-hover": "var(--color-danger-hover)",
+        success: "#03C95A",
+        "success-hover": "#02b250",
+        info: "#1B84FF",
+        "info-hover": "#1775e6",
+        warning: "#FFC107",
+        "warning-hover": "#e6ac06",
+        danger: "#E70D0D",
+        "danger-hover": "#cc0b0b",
 
         // Grayscale & Basic Colors
-        dark: "var(--color-foreground)",
-        light: "var(--color-background)",
+        dark: "#212529",
+        light: "#F8F9FA",
         white: "#FFFFFF",
         black: "#000000",
 
@@ -37,6 +48,18 @@ export default {
         pink: "#FD3995",
         skyblue: "#0DCAF0",
         teal: "#02a8b5",
+
+        // Teal Palette (Modern Teal Theme)
+        "teal-50": "#e6f7f8",
+        "teal-100": "#cceff1",
+        "teal-200": "#99dfe3",
+        "teal-300": "#66cfd5",
+        "teal-400": "#33bfc7",
+        "teal-500": "#02a8b5",
+        "teal-600": "#028691",
+        "teal-700": "#01656d",
+        "teal-800": "#014349",
+        "teal-900": "#002225",
 
         // Brand Gradients and Palette Levels
         "primary-100": "#FEF0E9",

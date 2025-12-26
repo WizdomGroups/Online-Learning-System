@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
-import type { TablePaginationConfig } from "antd/es/table";
+import { Table, ConfigProvider } from "antd";
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
-import "../css/dataTable.css";
-import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import {
+  ChevronRight,
+  ChevronLeft,
   BookOpen,
   Users,
   FileText,
@@ -15,9 +14,10 @@ import {
   Clock,
   ClipboardList,
   BarChart2,
+  Hash,
 } from "lucide-react";
-import { RootState } from "../store";
 import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface Column {
   key: string;
@@ -42,7 +42,7 @@ interface DynamicTableProps {
   label?: string;
   rowKey?: string;
   loading?: boolean;
-  headerType?: string; // New prop for header icon type
+  headerType?: string;
 }
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
@@ -52,10 +52,10 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   onPageChange,
   rowSelection = false,
   pathToNavigate,
-  label = "All",
+  label = "Overview",
   rowKey = "key",
   loading = false,
-  headerType = "Award", // New prop with default value
+  headerType = "Award",
 }) => {
   const navigate = useNavigate();
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
@@ -63,12 +63,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     (state: RootState) => state.loading.isTableDataLoading
   );
 
-  // Use either the prop loading or the Redux loading state
   const isLoading = loading || isTableDataLoading;
+  const brandTeal = "#084c61";
 
-  // Icon mapping for different study-related sections
+  // Icon mapping logic
   const getIcon = (type: string) => {
-    const iconMap = {
+    const iconMap: Record<string, any> = {
       grades: Award,
       document: FileText,
       modules: BookOpen,
@@ -83,209 +83,181 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
       progress: TrendingUp,
       attendance: Clock,
     };
-
     const IconComponent = iconMap[type] || FileText;
-    return <IconComponent className="w-5 h-5 text-blue-600" />;
+    return <IconComponent size={18} style={{ color: brandTeal }} />;
   };
 
+  // Modern Column Definition
   const antColumns: ColumnsType<any> = columns.map((col) => ({
-    title: col.label,
+    title: (
+      <span className="uppercase tracking-[0.15em] text-[10px] font-black text-slate-500">
+        {col.label}
+      </span>
+    ),
     dataIndex: col.dataIndex || col.key,
     key: col.key,
     sorter: col.sortable
       ? (a, b) => {
-          const aValue = a[col.key]?.toString() || "";
-          const bValue = b[col.key]?.toString() || "";
-          return aValue.localeCompare(bValue);
+          const aVal = a[col.key]?.toString() || "";
+          const bVal = b[col.key]?.toString() || "";
+          return aVal.localeCompare(bVal);
         }
       : false,
     render: col.render,
-    className: col.className || "text-sm font-medium",
-    onCell: () => ({ className: col.className || "" }),
-    onHeaderCell: () => ({ className: col.className || "" }),
+    className: "py-3 px-6 text-slate-600 font-semibold border-none",
   }));
 
-  const onSelectChange = (newSelectedRowKeys: any[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-
   return (
-    <div className="mt-2 bg-white shadow-sm">
-      <div className="px-6 py-4 border-b border-gray-100">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+    <div className="w-full mt-4 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-100 overflow-hidden">
+      {/* Table Top Bar */}
+      <div className="px-6 py-4 flex items-center justify-between bg-white border-b border-slate-50">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-slate-50 rounded-xl border border-slate-100 shadow-sm">
             {getIcon(headerType)}
-            <h2 className="font-semibold text-lg text-gray-800">{label}</h2>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">Total:</span>
-            <span className="font-medium text-gray-700 bg-gray-50 px-3 py-1 text-sm">
-              {pagination?.total}
-            </span>
+          <div>
+            <h2 className="text-base font-bold text-slate-800 tracking-tight leading-none">
+              {label}
+            </h2>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+              Management System
+            </p>
           </div>
+        </div>
+        <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+          <Hash size={12} className="text-slate-400" />
+          <span className="text-[10px] font-black uppercase text-slate-500 tracking-tight">
+            Total Records:
+          </span>
+          <span className="text-xs font-black text-[#084c61]">
+            {pagination?.total || 0}
+          </span>
         </div>
       </div>
 
-      {/* Mobile-only horizontal scroll to ensure only the table scrolls */}
-      <div className="overflow-x-auto md:overflow-visible w-full">
-      <div className="min-w-[700px] md:min-w-0">
-      <Table
-        className="custom-table"
-        columns={antColumns}
-        dataSource={data}
-        rowKey={rowKey}
-        loading={isLoading}
-        rowSelection={
-          rowSelection
-            ? {
-                selectedRowKeys,
-                onChange: onSelectChange,
-              }
-            : undefined
-        }
-        pagination={{
-          current: pagination?.current,
-          total: pagination?.total,
-          pageSize: pagination?.pageSize,
-          showSizeChanger: false,
-          locale: { items_per_page: "/ page" },
-          nextIcon: <RightOutlined />,
-          prevIcon: <LeftOutlined />,
-          onChange: onPageChange,
-          showTotal: (total: number, range: number[]) => (
-            <span className="pagination-total-text text-gray-500">
-              Showing {range[0]} - {range[1]} of {total} entries,
-            </span>
-          ),
-          position: ["bottomRight"] as TablePaginationConfig["position"],
-        }}
-        scroll={{ x: "max-content" }}
-        onRow={
-          pathToNavigate
-            ? (record: any) => ({
-                onClick: (e: any) => {
-                  if ((e.target as HTMLElement).closest(".action-icon")) return;
-                  navigate(`${pathToNavigate}/${record[rowKey]}`);
-                },
-              })
-            : undefined
-        }
-      />
+      {/* Table Body */}
+      <div className="overflow-x-auto">
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: brandTeal,
+              borderRadius: 8,
+              fontFamily: "Inter, system-ui, sans-serif",
+            },
+          }}
+        >
+          <Table
+            className="modern-light-table"
+            columns={antColumns}
+            dataSource={data}
+            rowKey={rowKey}
+            loading={isLoading}
+            rowSelection={
+              rowSelection
+                ? {
+                    selectedRowKeys,
+                    onChange: (keys) => setSelectedRowKeys(keys),
+                  }
+                : undefined
+            }
+            pagination={{
+              current: pagination?.current,
+              total: pagination?.total,
+              pageSize: pagination?.pageSize,
+              showSizeChanger: false,
+              nextIcon: <ChevronRight size={14} />,
+              prevIcon: <ChevronLeft size={14} />,
+              onChange: onPageChange,
+              className: "px-6 py-4 border-t border-slate-50 m-0",
+              showTotal: (total, range) => (
+                <span className="text-slate-400 text-[11px] font-black uppercase tracking-widest">
+                  Showing {range[0]}-{range[1]} of {total}
+                </span>
+              ),
+            }}
+            scroll={{ x: "max-content" }}
+            onRow={
+              pathToNavigate
+                ? (record) => ({
+                    onClick: (e: any) => {
+                      if ((e.target as HTMLElement).closest(".action-icon")) return;
+                      navigate(`${pathToNavigate}/${record[rowKey]}`);
+                    },
+                  })
+                : undefined
+            }
+          />
+        </ConfigProvider>
       </div>
-      </div>
 
-      <style>
-        {`
-        .custom-table .ant-table {
-          background: transparent;
-          font-family: 'Source Sans Pro', Arial, sans-serif;
-          border-radius: 0.5rem;
-          overflow: hidden;
-          // min-width: 1000px;
-        }
-        .custom-table .ant-table-container {
-          border-radius: 0.5rem;
-          overflow: hidden;
-        }
-        .custom-table .ant-table-thead > tr > th:first-child {
-          border-top-left-radius: 0.5rem;
-        }
-        .custom-table .ant-table-thead > tr > th:last-child {
-          border-top-right-radius: 0.5rem;
-        }
-        .custom-table .ant-table-thead > tr > th {
-          background: #f8fafc;
-          color: #1e293b;
-          font-weight: 600;
-          padding: 12px 16px;
-          border-bottom: 1px solid #e2e8f0;
-          font-size: 0.95rem;
-          white-space: nowrap;
-        }
-        .custom-table .ant-table-tbody > tr > td {
-          padding: 12px 16px;
-          border-bottom: 1px solid #f1f5f9;
-          color: #334155;
-          font-weight: 450;
-          position: relative;
-          overflow: visible;
-        }
-        .custom-table .ant-table-tbody > tr:hover > td {
-          background: #f8fafc;
-        }
-        .custom-table .ant-table-tbody > tr.ant-table-row-selected > td {
-          background: #f1f5f9;
+      <style>{`
+        /* Heading Styling: Light Background + Bold Text */
+        .modern-light-table .ant-table-thead > tr > th {
+          background-color: #f8fafc !important; /* Light Color */
+          border-bottom: 1px solid #f1f5f9 !important;
+          padding: 12px 24px !important;
         }
 
-        /* Light Theme Pagination */
-        .custom-table .ant-pagination-item {
-          border-radius: 6px;
-          margin: 0 4px;
-          border-color: #e2e8f0;
-        }
-        .custom-table .ant-pagination-item-active {
-          background: var(--color-primary);
-          border-color: var(--color-primary);
-        }
-        .custom-table .ant-pagination-item-active a {
-          color: white;
-        }
-        .custom-table .ant-pagination-prev .ant-pagination-item-link,
-        .custom-table .ant-pagination-next .ant-pagination-item-link {
-          border-radius: 6px;
-          border-color: #e2e8f0;
-          color: #64748b;
-        }
-        .custom-table .ant-pagination-prev .ant-pagination-item-link:hover,
-        .custom-table .ant-pagination-next .ant-pagination-item-link:hover {
-          border-color: var(--color-primary);
-          color: var(--color-primary);
-        }
-
-        /* Dark Theme Pagination */
-        [data-theme="dark"] .custom-table .ant-pagination-item {
-          background: var(--color-sidebar-bg);
-          border-color: var(--color-sidebar-hover-bg);
-        }
-        [data-theme="dark"] .custom-table .ant-pagination-item-active {
-          background: var(--color-primary);
-          border-color: var(--color-primary);
-        }
-        [data-theme="dark"] .custom-table .ant-pagination-item-active a {
-          color: white;
-        }
-        [data-theme="dark"] .custom-table .ant-pagination-prev .ant-pagination-item-link,
-        [data-theme="dark"] .custom-table .ant-pagination-next .ant-pagination-item-link {
-          background: var(--color-sidebar-bg);
-          border-color: var(--color-sidebar-hover-bg);
-          color: var(--color-sidebar-fg);
-        }
-        [data-theme="dark"] .custom-table .ant-pagination-prev .ant-pagination-item-link:hover,
-        [data-theme="dark"] .custom-table .ant-pagination-next .ant-pagination-item-link:hover {
-          border-color: var(--color-primary);
-          color: var(--color-primary);
-        }
-
-        .custom-table .ant-table-cell {
-          font-size: 0.875rem;
-          white-space: normal;
-          position: relative;
-          overflow: visible;
-        }
-        .custom-table .ant-table-row {
+        /* TBody Text Density */
+        .modern-light-table .ant-table-tbody > tr > td {
+          border-bottom: 1px solid #f8fafc !important;
+          font-size: 13px;
           transition: all 0.2s ease;
         }
-        .custom-table .ant-table-row:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+        /* Professional Hover State */
+        .modern-light-table .ant-table-tbody > tr:hover > td {
+          background-color: #fcfdfe !important;
+          color: #084c61 !important;
         }
-        @media (max-width: 768px) {
-          .pagination-total-text {
-            display: none;
-          }
+
+        /* Trendy Pagination Boxes */
+        .modern-light-table .ant-pagination-item {
+          border: none !important;
+          background: #f1f5f9 !important;
+          border-radius: 6px !important;
+          font-weight: 800 !important;
+          font-size: 11px !important;
+          min-width: 28px !important;
+          height: 28px !important;
+          line-height: 28px !important;
         }
-        `}
-      </style>
+
+        .modern-light-table .ant-pagination-item-active {
+          background: #084c61 !important;
+        }
+
+        .modern-light-table .ant-pagination-item-active a {
+          color: #ffffff !important;
+        }
+
+        .modern-light-table .ant-pagination-prev, 
+        .modern-light-table .ant-pagination-next {
+          min-width: 28px !important;
+          height: 28px !important;
+          line-height: 28px !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 6px !important;
+        }
+
+        /* Checkbox Override */
+        .modern-light-table .ant-checkbox-inner {
+          border-radius: 4px;
+          border-color: #cbd5e1;
+        }
+
+        /* Scrollbar for Professional Feel */
+        .overflow-x-auto::-webkit-scrollbar {
+          height: 6px;
+        }
+        .overflow-x-auto::-webkit-scrollbar-track {
+          background: #f1f5f9;
+        }
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+          background: #e2e8f0;
+          border-radius: 10px;
+        }
+      `}</style>
     </div>
   );
 };

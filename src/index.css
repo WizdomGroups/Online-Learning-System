@@ -1,14 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
 @theme {
   /* Primary Colors */
   --color-primary: #004990;
   --color-primary-hover: #003d73;
   --color-primary-foreground: #fff;
-  
+
   /* Accent Colors */
   --color-accent: #DFE3E6;
   --color-accent-foreground: #1A3956;
-  
+
   /* Status Colors */
   --color-success: #4CAF50;
   --color-success-hover: #43a047;
@@ -16,30 +18,30 @@
   --color-warning-hover: #e6a200;
   --color-danger: #FF4C4C;
   --color-danger-hover: #e64444;
-  
+
   /* Background & Text Colors */
   --color-background: #F7F8FA;
   --color-foreground: #1A1A1A;
   --color-text: #1A1A1A;
   --color-text-secondary: #4A5568;
   --color-text-muted: #718096;
-  
+
   /* Sidebar Colors */
   --color-sidebar-bg: #1E2A38;
   --color-sidebar-fg: #fff;
   --color-sidebar-icon: #A5B3C1;
   --color-sidebar-active-bg: #467091;
   --color-sidebar-hover-bg: #3D5B73;
-  
+
   /* Link Colors */
   --color-link: #1e40af;
   --color-link-hover: #1d4ed8;
-  
+
   /* Table Colors */
   --color-table-header: #374151;
-  
+
   /* Font */
-  --font-primary: 'Source Sans Pro', Arial, sans-serif;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
 * {
@@ -47,7 +49,7 @@
 }
 
 /* Update existing color references */
-.ant-table-wrapper .ant-table-thead > tr > th {
+.ant-table-wrapper .ant-table-thead>tr>th {
   background: var(--color-table-header);
   color: var(--color-sidebar-fg);
 }
@@ -101,18 +103,18 @@
   background-color: var(--color-accent);
 }
 
-/* Update link colors */
-a {
+/* Update link colors - Disabled to prevent navbar blue color */
+/* a {
   color: var(--color-link);
 }
 
 a:hover {
   color: var(--color-link-hover);
-}
+} */
 
 /* Dark theme overrides */
 [data-theme="dark"] .ant-picker-dropdown .ant-picker-content th,
-[data-theme="dark"] .ant-picker-dropdown .ant-picker-header > button:hover,
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-header>button:hover,
 [data-theme="dark"] .ant-picker-dropdown .ant-picker-cell-in-view,
 [data-theme="dark"] .ant-picker-dropdown .ant-picker-cell,
 [data-theme="dark"] .ant-picker-dropdown .ant-picker-header-view button,
@@ -1258,6 +1260,7 @@ span.rti--tag span {
 }
 
 [data-theme="dark"] {
+
   .ant-picker-dropdown .ant-picker-content th,
   .ant-picker-dropdown .ant-picker-header>button:hover,
   .ant-picker-dropdown .ant-picker-cell-in-view,
@@ -1469,38 +1472,46 @@ body.app-chat {
     margin-right: 0;
   }
 }
+
 .select-theme-color .ant-color-picker-trigger {
   min-width: 30px !important;
   height: 30px !important;
-  border-radius:50% !important;
+  border-radius: 50% !important;
+
   .ant-color-picker-color-block {
     width: 27px !important;
     height: 27px !important;
-    border-radius:50% !important;
+    border-radius: 50% !important;
   }
 }
-.Calendar-form{
+
+.Calendar-form {
   width: 100%;
 }
 
 .p-inputtext {
   border: none !important;
 }
+
 .chip-with-image {
   .p-inputtext.p-chips-multiple-container {
     width: 100%;
   }
+
   .p-chips:not(.p-disabled).p-focus .p-chips-multiple-container {
     box-shadow: none;
   }
+
   .p-chips .p-chips-multiple-container .p-chips-token {
     padding-left: 0;
   }
+
   .p-inputtext {
     height: 40px;
     width: auto;
     font-size: 15px;
   }
+
   .label-info {
     position: relative;
     color: #212529;
@@ -1508,6 +1519,7 @@ body.app-chat {
     font-size: 12px;
     padding-left: 30px;
   }
+
   .label-info::before {
     content: "";
     background-image: url(../public/assets/img/profiles/mail-user.jpg);
@@ -1519,153 +1531,188 @@ body.app-chat {
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
+  }
 }
-}
+
 .sticky-class {
   position: sticky;
   top: 0;
 }
+
 .video-section video {
   width: 100%;
   max-height: 140px;
 }
+
 .petiys {
   position: relative;
+
   .apexcharts-canvas {
     position: absolute;
     right: 50px;
   }
 }
-.p-picklist-source-controls.p-picklist-buttons{
+
+.p-picklist-source-controls.p-picklist-buttons {
   display: none;
 }
-.p-picklist-target-controls.p-picklist-buttons{
+
+.p-picklist-target-controls.p-picklist-buttons {
   display: none;
 }
-.p-picklist[pr_id_2]{
+
+.p-picklist[pr_id_2] {
   flex-direction: row !important;
 }
-.p-picklist[pr_id_2] .p-picklist-buttons{
+
+.p-picklist[pr_id_2] .p-picklist-buttons {
   flex-direction: row;
 }
-.p-picklist[pr_id_2] .p-picklist-buttons{
+
+.p-picklist[pr_id_2] .p-picklist-buttons {
   flex-direction: column !important;
 }
 
-.p-icon{
+.p-icon {
   transform: rotate(270deg);
 }
-.p-dropdown{
+
+.p-dropdown {
   box-shadow: none !important;
-  .p-dropdown-trigger{
-    .p-icon{
+
+  .p-dropdown-trigger {
+    .p-icon {
       transform: rotate(360deg);
     }
   }
 }
-span.p-dropdown-label.p-inputtext span{
+
+span.p-dropdown-label.p-inputtext span {
   font-weight: 400;
 }
+
 .input-icon {
-  &.input-icon-new{
-    .form-control{
+  &.input-icon-new {
+    .form-control {
       padding: 0.5rem 0.625rem;
     }
   }
 }
-.time{
-  .ant-picker{
+
+.time {
+  .ant-picker {
     margin-bottom: 0;
   }
 }
-.layout-mode-rtl{
+
+.layout-mode-rtl {
   .ms-3 {
     margin-left: unset !important;
     margin-right: 1rem !important;
-}
+  }
+
   .me-auto {
     margin-right: unset !important;
     margin-left: auto !important;
-}
-.Calendar-form.p-calendar.p-component.p-inputwrapper input.p-inputtext {
-  padding-left: auto;
-  padding-right: 30px;
-}
+  }
+
+  .Calendar-form.p-calendar.p-component.p-inputwrapper input.p-inputtext {
+    padding-left: auto;
+    padding-right: 30px;
+  }
+
   .apexcharts-canvas {
     direction: ltr;
   }
 }
-.sidebar{
-  .sidebar-menu{
-    @media (max-width:991.98px){
+
+.sidebar {
+  .sidebar-menu {
+    @media (max-width:991.98px) {
       margin-top: 16px;
     }
   }
 }
+
 @media (min-width:991.98px) {
   [data-layout="default"] {
     .sidebar {
       padding-top: 66px;
+
       .sidebar-logo {
         top: 0;
       }
+
       .sidebar-menu {
         margin-top: 0;
       }
     }
   }
+
   .layout-mode-rtl {
     .sidebar {
       padding-top: 66px;
+
       .sidebar-logo {
         top: 0;
       }
+
       .sidebar-menu {
         margin-top: 0;
       }
     }
   }
+
   [data-layout="transparent"] {
     .sidebar-menu {
       margin-top: 16px;
     }
   }
 }
-.sidebar-overlay .opened{
+
+.sidebar-overlay .opened {
   display: none !important;
-  @media (max-width:991.98px){
+
+  @media (max-width:991.98px) {
     display: block !important;
   }
 }
+
 .new-date {
- 
-    background: #fff !important;
-    cursor: pointer !important;
-    padding: 0.5rem 0.625rem !important;
-    padding-right: 32px !important;
-    border: 1px solid #E9EDF4 !important;
-    width: 100% !important;
-    border-radius: 5px !important;
-    font-size: 14px !important;
-    color: #202C4B;
-    height: 38px !important;
+
+  background: #fff !important;
+  cursor: pointer !important;
+  padding: 0.5rem 0.625rem !important;
+  padding-right: 32px !important;
+  border: 1px solid #E9EDF4 !important;
+  width: 100% !important;
+  border-radius: 5px !important;
+  font-size: 14px !important;
+  color: #202C4B;
+  height: 38px !important;
 
 }
+
 [data-theme="dark"] {
-  .table.ant-table-wrapper .ant-table-thead > tr > th, .ant-table-wrapper .ant-table-thead > tr > td {
+
+  .table.ant-table-wrapper .ant-table-thead>tr>th,
+  .ant-table-wrapper .ant-table-thead>tr>td {
     color: #E5E7EB;
     font-weight: 600;
     background: #101010;
     border-bottom: 1px solid #101010;
     font-size: 14px;
-}
-.ant-table-wrapper .ant-table-column-sorter {
-  color: #E5E7EB !important;
-}
+  }
+
+  .ant-table-wrapper .ant-table-column-sorter {
+    color: #E5E7EB !important;
+  }
+
   .Calendar-form.p-calendar.p-component.p-inputwrapper input.p-inputtext {
     color: #fff;
     background-color: #000;
   }
+
   .p-datepicker {
     background: #0F0C1C !important;
 
@@ -1679,7 +1726,7 @@ span.p-dropdown-label.p-inputtext span{
     }
   }
 
- .ant-checkbox .ant-checkbox-inner {
+  .ant-checkbox .ant-checkbox-inner {
     background-color: #5B576B;
     border-color: #1B1632;
   }
@@ -1689,7 +1736,7 @@ span.p-dropdown-label.p-inputtext span{
     color: #C8D2E0 !important;
     border: 1px solid #1F2228 !important;
   }
-  
+
 
   .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
     background: #131022 !important;
@@ -1735,6 +1782,6 @@ span.p-dropdown-label.p-inputtext span{
   }
 }
 
-button{
+button {
   cursor: pointer;
 }

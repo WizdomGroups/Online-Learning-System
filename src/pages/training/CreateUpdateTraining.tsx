@@ -342,8 +342,8 @@ const CreateUpdateTraining: React.FC = () => {
         // Handle API response errors
         setApiError(
           response.message ||
-            response.exception ||
-            `Failed to ${isEditMode ? "update" : "create"} training`
+          response.exception ||
+          `Failed to ${isEditMode ? "update" : "create"} training`
         );
       }
     } catch (error) {
@@ -366,8 +366,7 @@ const CreateUpdateTraining: React.FC = () => {
           } else if (apiError.status === 403) {
             // Permission denied
             console.warn(
-              `Permission denied for training ${
-                isEditMode ? "update" : "creation"
+              `Permission denied for training ${isEditMode ? "update" : "creation"
               }`
             );
           } else if (apiError.status === 409) {
@@ -453,6 +452,7 @@ const CreateUpdateTraining: React.FC = () => {
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     className="col-span-2 md:col-span-1"
+                    customDropdown={true}
                   />
                 )}
 
@@ -564,8 +564,8 @@ const CreateUpdateTraining: React.FC = () => {
                         ? "Updating..."
                         : "Creating..."
                       : isEditMode
-                      ? "Update"
-                      : "Submit"
+                        ? "Update"
+                        : "Submit"
                   }
                   disabled={isLoading}
                 />

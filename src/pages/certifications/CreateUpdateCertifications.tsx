@@ -410,10 +410,10 @@ const CreateUpdateCertifications: React.FC = () => {
         );
         return trainingRecord
           ? {
-              label: trainingRecord.trainingName,
-              value: trainingRecord.id.toString(),
-              tenantId: trainingRecord.tenantId,
-            }
+            label: trainingRecord.trainingName,
+            value: trainingRecord.id.toString(),
+            tenantId: trainingRecord.tenantId,
+          }
           : null;
       })
       .filter(
@@ -775,18 +775,16 @@ const CreateUpdateCertifications: React.FC = () => {
                               prev.status === "active" ? "inactive" : "active",
                           }))
                         }
-                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${
-                          formData.status === "active"
+                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${formData.status === "active"
                             ? "bg-primary border-primary"
                             : "bg-gray-200 border-gray-300"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${
-                            formData.status === "active"
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${formData.status === "active"
                               ? "translate-x-6"
                               : "translate-x-1"
-                          }`}
+                            }`}
                         />
                         <span className="sr-only">Toggle status</span>
                       </button>
@@ -816,18 +814,16 @@ const CreateUpdateCertifications: React.FC = () => {
                               prev.feedbackRequired === "yes" ? "no" : "yes",
                           }))
                         }
-                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${
-                          formData.feedbackRequired === "yes"
+                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${formData.feedbackRequired === "yes"
                             ? "bg-primary border-primary"
                             : "bg-gray-200 border-gray-300"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${
-                            formData.feedbackRequired === "yes"
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${formData.feedbackRequired === "yes"
                               ? "translate-x-6"
                               : "translate-x-1"
-                          }`}
+                            }`}
                         />
                         <span className="sr-only">
                           Toggle feedback required
@@ -858,18 +854,16 @@ const CreateUpdateCertifications: React.FC = () => {
                             certificationValidation: "", // Clear validation error when assessment toggle changes
                           }));
                         }}
-                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${
-                          formData.assessmentRequired === "yes"
+                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${formData.assessmentRequired === "yes"
                             ? "bg-primary border-primary"
                             : "bg-gray-200 border-gray-300"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${
-                            formData.assessmentRequired === "yes"
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${formData.assessmentRequired === "yes"
                               ? "translate-x-6"
                               : "translate-x-1"
-                          }`}
+                            }`}
                         />
                         <span className="sr-only">
                           Toggle assessment required
@@ -900,18 +894,16 @@ const CreateUpdateCertifications: React.FC = () => {
                             }),
                           }))
                         }
-                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${
-                          formData.recurring === "yes"
+                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-200 ease-out focus:outline-none border shadow-sm hover:shadow ${formData.recurring === "yes"
                             ? "bg-primary border-primary"
                             : "bg-gray-200 border-gray-300"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${
-                            formData.recurring === "yes"
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-200 ${formData.recurring === "yes"
                               ? "translate-x-6"
                               : "translate-x-1"
-                          }`}
+                            }`}
                         />
                         <span className="sr-only">Toggle recurring</span>
                       </button>
@@ -970,8 +962,8 @@ const CreateUpdateCertifications: React.FC = () => {
                           { label: "Months", value: "months" },
                           { label: "Years", value: "years" },
                         ]}
-                        placeholder="Select Interval Type"
                         required
+                        customDropdown={true}
                       />
                     </div>
                     <div className="transition-all duration-200 ease-out">
@@ -1032,9 +1024,8 @@ const CreateUpdateCertifications: React.FC = () => {
 
       <SuccessModal
         isOpen={isModalOpen}
-        title={`Certification ${
-          certificateId ? "Updated" : "Created"
-        } Successfully`}
+        title={`Certification ${certificateId ? "Updated" : "Created"
+          } Successfully`}
         subtitle="Your certification details have been saved."
         onCancel={() => {
           setModalOpen(false);

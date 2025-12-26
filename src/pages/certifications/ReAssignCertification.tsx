@@ -101,7 +101,7 @@ const ReAssignCertifications: React.FC = () => {
             Re Assign certificate template that can be assigned to users upon
             completion of courses or modules.
           </span> */}
-          </div>
+        </div>
         <main className="bg-white p-8 rounded-lg shadow-sm">
 
           {/* <h2 className="text-lg font-medium mt-6 mb-2">Details</h2> */}
@@ -118,6 +118,7 @@ const ReAssignCertifications: React.FC = () => {
                   { label: "Design", value: "design" },
                   { label: "Development", value: "development" },
                 ]}
+                customDropdown={true}
               />
 
               <SelectField
@@ -131,6 +132,7 @@ const ReAssignCertifications: React.FC = () => {
                   { label: "Design", value: "design" },
                   { label: "Development", value: "development" },
                 ]}
+                customDropdown={true}
               />
 
               <TextField
@@ -155,6 +157,7 @@ const ReAssignCertifications: React.FC = () => {
                   { label: "No", value: "no" },
                 ]}
                 placeholder="Yes/No"
+                customDropdown={true}
               />
 
               <SelectField
@@ -167,6 +170,7 @@ const ReAssignCertifications: React.FC = () => {
                   { label: "Design", value: "design" },
                   { label: "Development", value: "development" },
                 ]}
+                customDropdown={true}
               />
               <DateField
                 label="Start Date"
@@ -195,6 +199,7 @@ const ReAssignCertifications: React.FC = () => {
                   { label: "No", value: "no" },
                 ]}
                 placeholder="-Select status-"
+                customDropdown={true}
               />
 
               <SelectField
@@ -207,6 +212,7 @@ const ReAssignCertifications: React.FC = () => {
                   { label: "Design", value: "design" },
                   { label: "Development", value: "development" },
                 ]}
+                customDropdown={true}
               />
 
               <div className="col-span-1 md:col-span-2">

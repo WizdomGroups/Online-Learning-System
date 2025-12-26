@@ -171,22 +171,22 @@ const CertificationsTransaction: React.FC = () => {
     // Conditionally show company name for super admin
     ...(isSuperAdmin
       ? [
-          {
-            key: "CompanyModel",
-            label: "Company Name",
-            dataIndex: "CompanyModel",
-            render: (
-              _value: string,
-              record: CertificationTransactionRecord
-            ) => {
-              return (
-                <span className="max-w-[200px] truncate overflow-hidden whitespace-nowrap block">
-                  {record?.CompanyModel?.name || "-"}
-                </span>
-              );
-            },
+        {
+          key: "CompanyModel",
+          label: "Company Name",
+          dataIndex: "CompanyModel",
+          render: (
+            _value: string,
+            record: CertificationTransactionRecord
+          ) => {
+            return (
+              <span className="max-w-[200px] truncate overflow-hidden whitespace-nowrap block">
+                {record?.CompanyModel?.name || "-"}
+              </span>
+            );
           },
-        ]
+        },
+      ]
       : []),
     {
       key: "employeeDetails",
@@ -244,8 +244,8 @@ const CertificationsTransaction: React.FC = () => {
             {record.certificationResult === "Pass"
               ? "Passed"
               : record.certificationResult === "Fail"
-              ? "Failed"
-              : "Pending"}
+                ? "Failed"
+                : "Pending"}
           </Tag>
         );
       },
@@ -279,11 +279,10 @@ const CertificationsTransaction: React.FC = () => {
                     onClick={() =>
                       handleDownloadCertificationPdf(record.id.toString())
                     }
-                    className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 ${
-                      downloadingCert === record.id.toString()
+                    className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 ${downloadingCert === record.id.toString()
                         ? "text-green-500 bg-green-50"
                         : "text-gray-600 hover:text-green-500 hover:bg-green-50"
-                    }`}
+                      }`}
                   >
                     {downloadingCert === record.id.toString() ? (
                       <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
@@ -410,8 +409,8 @@ const CertificationsTransaction: React.FC = () => {
     resultFilter === "all"
       ? certifications
       : certifications.filter((item: any) =>
-          String(item?.certificationResult || "").toLowerCase() === resultFilter
-        );
+        String(item?.certificationResult || "").toLowerCase() === resultFilter
+      );
 
   return (
     <>
@@ -437,6 +436,7 @@ const CertificationsTransaction: React.FC = () => {
           value={resultFilter}
           name="resultFilter"
           onChange={(e) => setResultFilter(String(e.target.value))}
+          customDropdown={true}
         />
         {isSuperAdmin && (
           <SelectField

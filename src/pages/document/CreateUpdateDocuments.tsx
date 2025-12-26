@@ -542,8 +542,8 @@ const CreateUpdateDocuments: React.FC = () => {
               error.response.data &&
               typeof error.response.data === "object" &&
               "message" in error.response.data
-            ? String(error.response.data.message)
-            : "Network Error";
+              ? String(error.response.data.message)
+              : "Network Error";
         setErrors({
           apiError: errorMessage,
         });
@@ -606,8 +606,8 @@ const CreateUpdateDocuments: React.FC = () => {
         "content" in response.payload &&
         response.payload.content &&
         "result" in
-          (response.payload as { content: { result?: { data?: unknown } } })
-            .content &&
+        (response.payload as { content: { result?: { data?: unknown } } })
+          .content &&
         (response.payload as { content: { result?: { data?: unknown } } })
           .content.result &&
         Array.isArray(
@@ -836,6 +836,7 @@ const CreateUpdateDocuments: React.FC = () => {
                   options={StatusList}
                   placeholder="Select Status"
                   className="w-full"
+                  customDropdown={true}
                 />
 
                 <SelectField
@@ -848,6 +849,7 @@ const CreateUpdateDocuments: React.FC = () => {
                   options={SecurityList}
                   placeholder="Select Security Type"
                   className="w-full"
+                  customDropdown={true}
                 />
               </div>
 
@@ -866,11 +868,10 @@ const CreateUpdateDocuments: React.FC = () => {
                     {existingFiles.map((file) => (
                       <div
                         key={file.id}
-                        className={`flex items-center justify-between p-4 border rounded-lg ${
-                          filesToDelete.includes(file.id)
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 bg-gray-50"
-                        }`}
+                        className={`flex items-center justify-between p-4 border rounded-lg ${filesToDelete.includes(file.id)
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 bg-gray-50"
+                          }`}
                       >
                         <div className="flex items-center space-x-3">
                           <input
@@ -1010,11 +1011,10 @@ const CreateUpdateDocuments: React.FC = () => {
                     {existingLinks.map((link) => (
                       <div
                         key={link.id}
-                        className={`p-4 border rounded-xl shadow-sm hover:shadow-md transition ${
-                          linksToDelete.includes(link.id)
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200 bg-white"
-                        }`}
+                        className={`p-4 border rounded-xl shadow-sm hover:shadow-md transition ${linksToDelete.includes(link.id)
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 bg-white"
+                          }`}
                       >
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
                           <div className="flex items-center space-x-3">

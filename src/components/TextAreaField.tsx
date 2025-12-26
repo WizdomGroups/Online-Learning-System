@@ -26,9 +26,9 @@ const TextAreaField: React.FC<TextAreaProps> = ({
   maxLength,
 }) => {
   return (
-    <div className={`flex flex-col gap-1 w-full ${className}`}>
-      <label className="text-sm text-gray-700 font-medium">
-        {label} {required && <span className="text-orange-500">*</span>}
+    <div className={`flex flex-col gap-1.5 w-full ${className}`}>
+      <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 ml-1">
+        {label} {required && <span className="text-teal-600">*</span>}
       </label>
       <textarea
         name={name}
@@ -37,16 +37,15 @@ const TextAreaField: React.FC<TextAreaProps> = ({
         onChange={onChange}
         rows={rows}
         maxLength={maxLength}
-        className={`px-4 py-2 border rounded-md bg-white text-sm text-gray-700 placeholder-gray-400 resize-none focus:outline-none focus:ring-1 ${
-          error
-            ?  "border-orange-500 focus:ring-orange-500"
-            : "border-gray-300 focus:ring-primary"
-        }`}
+        className={`w-full py-3 px-4 bg-slate-50 border rounded-xl text-sm font-semibold text-slate-700 placeholder:text-slate-400 resize-none focus:outline-none transition-all duration-300 ${error
+            ? "border-red-400 focus:border-red-500 bg-red-50/50"
+            : "border-slate-200 focus:border-teal-600 focus:bg-white focus:shadow-[0_4px_20px_rgba(0,0,0,0.03)]"
+          }`}
       />
-      <div className="flex justify-between items-center">
-       {error && <span className="text-xs text-orange-500">{error}</span>}
+      <div className="flex justify-between items-center ml-1">
+        {error && <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider">{error}</span>}
         {maxLength && (
-          <span className="text-xs text-gray-400 ml-auto">
+          <span className="text-[10px] text-slate-400 font-bold ml-auto">
             {value.length}/{maxLength}
           </span>
         )}
